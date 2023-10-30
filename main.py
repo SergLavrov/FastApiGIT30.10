@@ -5,8 +5,6 @@ from dotenv import dotenv_values
 
 config = dotenv_values(".env")
 
-config = dotenv_values(".env")
-
 connect = psycopg.connect(
     host=config['HOST'],
     port=config['PORT'],
@@ -21,6 +19,11 @@ app = FastAPI()
 
 @app.get("/")
 def root():
+    return "Processing..."
+
+
+@app.get("/get-projects")
+def get_all_projects():
     try:
         cursor.execute("SELECT * FROM project")
         result = cursor.fetchall()
