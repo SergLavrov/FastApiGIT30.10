@@ -17,5 +17,18 @@ connect = psycopg.connect(
 
 cursor = connect.cursor()
 
-app = FastAPI
+app = FastAPI()
+
+@app.get("/")
+def root():
+    try:
+        cursor.execute("SELECT * FROM project")
+        result = cursor.fetchall()
+        responce = []
+        for i in result:
+            responce.append({"id": i[0], "name": i[1], "lead_name": i[2], "count_user": [3], "is_finish": [4]})
+        return responce
+    except Exception as e:
+        print(e)
+        return e
 
