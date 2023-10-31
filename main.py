@@ -1,6 +1,15 @@
 from fastapi import FastAPI
 import psycopg2 as psycopg
 from dotenv import dotenv_values
+from pydantic import BaseModel
+
+
+class Adding_to_project(BaseModel):
+    id: int
+    name: str
+    lead_name: str
+    count_user: int
+    is_finish: bool
 
 
 config = dotenv_values(".env")
@@ -37,6 +46,7 @@ def get_all_projects():
         return e
 
 # 2. Чтение записи по ID
+
 @app.get("/get-project/{id}")
 def get_project(id: int):
     try:
@@ -49,4 +59,38 @@ def get_project(id: int):
         print(e)
         return e
 
+
 # 3. Добавление записи
+
+# ВАРИАНТ 1
+@app.post("/add-project")
+def add_project():
+    try:
+        cursor.execute(f"""
+            INSERT INTO project (id, name, lead_name, count_user, is_finish)
+            VALUES (5, 'Project5', 'Nazar', 3, TRUE)
+        """)
+
+        connect.commit()
+        return {"message": "Processing successful"}
+
+    except Exception as e:
+        print(e)
+        return e
+
+
+# ВАРИАНТ 2 (через pydantic (BaseModel))
+@app.post("/add-project")
+def add_project(proj: Adding_to_project):
+    try:
+        cursor.execute(f"""
+            INSERT INTO project (id, name, lead_name, count_user, is_finish)
+            VALUES ({proj.id}, '{proj.name}', '{proj.lead_name}', {proj.count_user}, {proj.is_finish})
+        """)
+
+        connect.commit()
+        return {"message": "Processing successful"}
+
+    except Exception as e:
+        print(e)
+        return e
