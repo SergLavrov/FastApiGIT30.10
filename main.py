@@ -45,8 +45,8 @@ def get_all_projects():
         print(e)
         return e
 
-# 2. Чтение записи по ID
 
+# 2. Чтение записи по ID
 @app.get("/get-project/{id}")
 def get_project(id: int):
     try:
@@ -63,20 +63,20 @@ def get_project(id: int):
 # 3. Добавление записи
 
 # ВАРИАНТ 1
-@app.post("/add-project")
-def add_project():
-    try:
-        cursor.execute(f"""
-            INSERT INTO project (id, name, lead_name, count_user, is_finish)
-            VALUES (5, 'Project5', 'Nazar', 3, TRUE)
-        """)
-
-        connect.commit()
-        return {"message": "Processing successful"}
-
-    except Exception as e:
-        print(e)
-        return e
+# @app.post("/add-project")
+# def add_project():
+#     try:
+#         cursor.execute(f"""
+#             INSERT INTO project (id, name, lead_name, count_user, is_finish)
+#             VALUES (5, 'Project5', 'Nazar', 3, TRUE)
+#         """)
+#
+#         connect.commit()
+#         return {"message": "Processing successful"}
+#
+#     except Exception as e:
+#         print(e)
+#         return e
 
 
 # ВАРИАНТ 2 (через pydantic (BaseModel))
@@ -94,3 +94,18 @@ def add_project(proj: Adding_to_project):
     except Exception as e:
         print(e)
         return e
+
+
+# 3. Удаление записи по ID
+@app.delete("/delete-entry/{id}")
+def delete_table_entry(id: int):
+    try:
+        cursor.execute(f"DELETE FROM project WHERE id = {id}")
+
+        connect.commit()
+        return {"message": "Processing successful"}
+
+    except Exception as e:
+        print(e)
+        return e
+
