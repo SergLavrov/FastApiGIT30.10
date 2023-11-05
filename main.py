@@ -60,6 +60,34 @@ def get_project(id: int):
         return e
 
 
+# ВЫВЕСТИ ТОЛЬКО "name" ПРОЕКТА ПО ID !!!
+@app.get("/project/{id}/name")
+def get_proj(id: int):
+    try:
+        cursor.execute(f"SELECT * FROM project WHERE id = {id}")
+
+        result = cursor.fetchone()
+        return {result[1]}
+
+    except Exception as e:
+        print(e)
+        return e
+
+
+# ВЫВЕСТИ "COUNT_USER" ПО ID !!!
+@app.get("/get-count-users/{id}/count_user")
+def get_count_users(id: int):
+    try:
+        cursor.execute(f"SELECT * FROM project WHERE id = {id}")
+
+        result = cursor.fetchone()
+        return {"Quantity of users": result[3]}
+
+    except Exception as e:
+        print(e)
+        return e
+
+
 # 3. Добавление записи
 
 # ВАРИАНТ 1
@@ -79,7 +107,7 @@ def get_project(id: int):
 #         return e
 
 
-# ВАРИАНТ 2 (через pydantic (BaseModel))
+# ВАРИАНТ 2 Добавление записи (через pydantic (BaseModel))
 @app.post("/add-project")
 def add_project(proj: Adding_to_project):
     try:
@@ -108,4 +136,5 @@ def delete_table_entry(id: int):
     except Exception as e:
         print(e)
         return e
+
 
