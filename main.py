@@ -11,6 +11,14 @@ class Adding_to_project(BaseModel):
     count_user: int
     is_finish: bool
 
+class vm_update_project(BaseModel):
+    id: int
+    name: str
+    lead_name: str
+    count_user: int
+    is_finish: bool
+
+
 
 config = dotenv_values(".env")
 
@@ -108,6 +116,13 @@ def get_count_users(id: int):
 
 
 # ВАРИАНТ 2 Добавление записи (через pydantic (BaseModel))
+# class Adding_to_project(BaseModel):
+#     id: int
+#     name: str
+#     lead_name: str
+#     count_user: int
+#     is_finish: bool
+
 @app.post("/add-project")
 def add_project(proj: Adding_to_project):
     try:
@@ -138,3 +153,42 @@ def delete_table_entry(id: int):
         return e
 
 
+# 4. Обновление данных по "ID" через VIEW-таблицу  PUT / PATCH
+# class vm_update_project(BaseModel):
+#     id: int
+#     name: str
+#     lead_name: str
+#     count_user: int
+#     is_finish: bool
+
+# PUT-изменяет ВСЕ поля строки Таблицы Project
+# PUT - меняет объект целиком.
+@app.put("/update-project")
+def update_project(proj: vm_update_project):
+    try:
+        cursor.execute(f"""
+            UPDATE project
+            SET name = SET name = '{proj.name}', lead_name = '{proj.lead_name}', count_user = '{proj.count_user}', is_finish = '{proj.is_finish}'
+            WHERE id = {proj.id};
+        """)
+        connect.commit()
+
+        return {"message": "Success"}
+    except Exception as e:
+        return {"error": e}
+
+
+# PATCH-изменяет ВСЕ поля строки Таблицы Project
+@app.patch("/update-project")
+def update_project(proj: vm_update_project):
+    try:
+        cursor.execute(f"""
+            UPDATE project
+            SET name = '{proj.name}'
+            WHERE id = {proj.id};
+        """)
+        connect.commit()
+
+        return {"message": "Success"}
+    except Exception as e:
+        return {"error": e}
