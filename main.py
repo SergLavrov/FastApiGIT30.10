@@ -163,22 +163,22 @@ def delete_table_entry(id: int):
 
 # PUT-изменяет ВСЕ поля строки Таблицы Project
 # PUT - меняет объект целиком.
-@app.put("/update-project")
-def update_project(proj: vm_update_project):
-    try:
-        cursor.execute(f"""
-            UPDATE project
-            SET name = SET name = '{proj.name}', lead_name = '{proj.lead_name}', count_user = '{proj.count_user}', is_finish = '{proj.is_finish}'
-            WHERE id = {proj.id};
-        """)
-        connect.commit()
+# @app.put("/update-project")
+# def update_project(proj: vm_update_project):
+#     try:
+#         cursor.execute(f"""
+#             UPDATE project
+#             SET name = SET name = '{proj.name}', lead_name = '{proj.lead_name}', count_user = '{proj.count_user}', is_finish = '{proj.is_finish}'
+#             WHERE id = {proj.id};
+#         """)
+#         connect.commit()
+#
+#         return {"message": "Success"}
+#     except Exception as e:
+#         return {"error": e}
 
-        return {"message": "Success"}
-    except Exception as e:
-        return {"error": e}
 
-
-# PATCH-изменяет ВСЕ поля строки Таблицы Project
+# PATCH-изменяет только те поля, которые нужно!
 @app.patch("/update-project")
 def update_project(proj: vm_update_project):
     try:
@@ -191,4 +191,4 @@ def update_project(proj: vm_update_project):
 
         return {"message": "Success"}
     except Exception as e:
-        return {"error": e}
+        return e
